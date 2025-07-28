@@ -1,0 +1,1 @@
+Here is the rapid processing chain script for running rapid on UWM HPC
