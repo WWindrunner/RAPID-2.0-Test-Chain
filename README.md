@@ -1,14 +1,14 @@
-\# RAPID Processing Chain Script (UWM HPC)
+# RAPID Processing Chain Script (UWM HPC)
 
 
 
-This repository provides a script for running \*\*RAPID 2.0\*\* on the UWM HPC cluster.  
+This repository provides a script for running **RAPID 2.0** on the UWM HPC cluster.  
 
 It automates the workflow by setting parameters and paths, so you don’t need to run every step manually.  
 
 
 
-The script requires \*\*SLURM\*\* since it submits RAPID jobs and monitors job status via SLURM commands.
+The script requires **SLURM** since it submits RAPID jobs and monitors job status via SLURM commands.
 
 
 
@@ -16,21 +16,21 @@ The script requires \*\*SLURM\*\* since it submits RAPID jobs and monitors job s
 
 
 
-\## Setup \& Run
+## Setup & Run
 
 
 
-\### 1. Prepare RAPID 2.0
+### 1. Prepare RAPID 2.0
 
-\- Make sure \*\*RAPID 2.0\*\* is installed and working correctly.  
+- Make sure **RAPID 2.0** is installed and working correctly.  
 
-\- Test the 3 steps separately before running the chain:
+- Test the 3 steps separately before running the chain:
 
-&nbsp; 1. \*\*Binary classification\*\*
+&nbsp; 1. **Binary classification**
 
-&nbsp; 2. \*\*morph\_pre\*\*
+&nbsp; 2. **morph_pre**
 
-&nbsp; 3. \*\*morph\*\*
+&nbsp; 3. **morph**
 
 
 
@@ -38,19 +38,19 @@ The script requires \*\*SLURM\*\* since it submits RAPID jobs and monitors job s
 
 
 
-\### 2. Modify `run\_rapid.sh`
+### 2. Modify `run_rapid.sh`
 
-Edit the following variables in `run\_rapid.sh`:
+Edit the following variables in `run_rapid.sh`:
 
 
 
 ```bash
 
-\#SBATCH --output=/home/uwm/maopuxu/rapid\_test\_chain\_%j.out
+#SBATCH --output=/home/uwm/maopuxu/rapid_test_chain_%j.out
 
 ```
 
-Path to the \*\*output log file\*\*.  
+Path to the **output log file**.  
 
 Must be outside the `RAPID-2.0-Test-Chain` folder to avoid errors.
 
@@ -58,43 +58,43 @@ Must be outside the `RAPID-2.0-Test-Chain` folder to avoid errors.
 
 ```bash
 
-BATCH\_FILE="/home/uwm/maopuxu/RAPID\_script/batch\_rapid.sh"
+BATCH_FILE="/home/uwm/maopuxu/RAPID_script/batch_rapid.sh"
 
 ```
 
-Path to the RAPID \*\*submission script\*\* (`.sh` file).
+Path to the RAPID **submission script** (`.sh` file).
 
 
 
 ```bash
 
-CMD\_CONF="/home/uwm/maopuxu/RAPID\_script/cmd\_RAPID.conf"
+CMD_CONF="/home/uwm/maopuxu/RAPID_script/cmd_RAPID.conf"
 
 ```
 
-Path to the RAPID \*\*configuration file\*\* (`.conf`).
+Path to the RAPID **configuration file** (`.conf`).
 
 
 
 ```bash
 
-CONTROL\_FILE="/tank/data/SFS/xinyis/shared/data/RAPID\_test/2022/case\_20220501/case\_20220501.project"
+CONTROL_FILE="/tank/data/SFS/xinyis/shared/data/RAPID_test/2022/case_20220501/case_20220501.project"
 
 ```
 
-Path to the RAPID \*\*project file\*\* (`.project`).
+Path to the RAPID **project file** (`.project`).
 
 
 
 ```bash
 
-FILE\_ID\_MAX=1
+FILE_ID_MAX=1
 
 ```
 
 Number of images to process.  
 
-RAPID will automatically run from the \*\*first image\*\* up to `FILE\_ID\_MAX`.
+RAPID will automatically run from the **first image** up to `FILE_ID_MAX`.
 
 
 
@@ -102,7 +102,7 @@ RAPID will automatically run from the \*\*first image\*\* up to `FILE\_ID\_MAX`.
 
 
 
-\### 3. Submit the Job
+### 3. Submit the Job
 
 Run the following command:
 
@@ -110,7 +110,7 @@ Run the following command:
 
 ```bash
 
-sbatch run\_rapid.sh
+sbatch run_rapid.sh
 
 ```
 
@@ -120,11 +120,11 @@ sbatch run\_rapid.sh
 
 
 
-\## Contact
+## Contact
 
 For errors and questions, please reach out:  
 
-\*\*maopuxu@uwm.edu\*\*
+**maopuxu@uwm.edu**
 
 
 
