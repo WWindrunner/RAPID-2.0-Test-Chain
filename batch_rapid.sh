@@ -7,11 +7,10 @@
 
 echo "Job started"
 
-cd /home/uwm/maopuxu/
-source .bashrc
-cd water_body_extraction/RAPID/
+source /home/uwm/maopuxu/.bashrc
+cd /home/uwm/maopuxu/water_body_extraction/RAPID/
 
-srun -l -o  /home/uwm/maopuxu/RAPID_script/logs/RAPID_v2-%j-%t.out --multi-prog /home/uwm/maopuxu/RAPID_script/cmd_RAPID.conf
+srun -l -o /home/uwm/maopuxu/RAPID_script/logs/RAPID_v2-%j-%t.out --multi-prog /home/uwm/maopuxu/RAPID_script/cmd_RAPID.conf
 
 status=$?
 if [ $status -eq 0 ]; then

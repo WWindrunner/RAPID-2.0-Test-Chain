@@ -2,13 +2,17 @@
 
 #SBATCH --output=/home/uwm/maopuxu/rapid_test_chain_%j.out
 
+BATCH_FILE="/home/uwm/maopuxu/RAPID_script/batch_rapid.sh"
 CMD_CONF="/home/uwm/maopuxu/RAPID_script/cmd_RAPID.conf"
 CONTROL_FILE="/tank/data/SFS/xinyis/shared/data/RAPID_test/2022/case_20220501/case_20220501.project"
 FILE_ID_MAX=1
-LOG_FOLDER="logs"
 
 declare -a POLS=("\"VV\"" "\"VH\"" "\"VV\",\"VH\"" "\"VV\",\"VH\"")
 declare -a TASKS=("\"binary_classify\"" "\"binary_classify\"" "\"morph_pre\"" "\"morph\"")
+
+LOG_FOLDER="$(dirname "$CMD_CONF")/logs"
+./modify_batch_file.sh "$CMD_CONF" "$BATCH_FILE"
+mkdir -p "$LOG_FOLDER"
 
 file_id=1
 while [ "$file_id" -le "$FILE_ID_MAX" ]; do
