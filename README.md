@@ -38,52 +38,22 @@ The script requires **SLURM** since it submits RAPID jobs and monitors job statu
 
 
 
-### 2. Modify `run_rapid.conf` and `slurm_submit.sh`
+### 2. Modify `run_rapid.conf` and files in `templates/`
 
-Edit the following lines:
-
-
-
-```bash
-
-#SBATCH --output=/home/uwm/maopuxu/rapid_test_chain_%j.out
-
-```
-
-Path to the **output log file**.  
-
-Must be outside the `RAPID-2.0-Test-Chain` folder to avoid errors.
-
+Edit the following lines in `run_rapid.conf`:
 
 
 ```bash
 
-BATCH_FILE="/home/uwm/maopuxu/RAPID_script/batch_rapid.sh"
+CONTROL_FOLDER="/tank/data/SFS/xinyis/shared/data/RAPID_test/2022/case_20220501"
 
 ```
 
-Path to the RAPID **submission script** (`.sh` file).
+Path to the folder to place the control file.
 
+This script will automaticlly generate the corresponding `RAPID.project` file in that folder.
 
-
-```bash
-
-CMD_CONF="/home/uwm/maopuxu/RAPID_script/cmd_RAPID.conf"
-
-```
-
-Path to the RAPID **configuration file** (`.conf`).
-
-
-
-```bash
-
-CONTROL_FILE="/tank/data/SFS/xinyis/shared/data/RAPID_test/2022/case_20220501/case_20220501.project"
-
-```
-
-Path to the RAPID **project file** (`.project`).
-
+The images to be processed are in the folder `processed_images` as default, under the same folder.
 
 
 ```bash
@@ -95,6 +65,12 @@ FILE_ID_MAX=1
 Number of images to process.  
 
 RAPID will automatically run from the **first image** up to `FILE_ID_MAX`.
+
+Do **not** modify paths of `.sh` and `.conf` files for now.
+
+They are copied from the `templates/` folder, and will be here as default.
+
+Make sure the `sbatch` parameters and file paths are correct in the files in `templates/` folder.
 
 
 
@@ -110,9 +86,15 @@ Run the following command:
 
 ```bash
 
-sbatch run_rapid.sh
+cd RAPID-2.0-Test-Chain
+
+sbatch slurm_submit.sh
 
 ```
+
+Make sure you are in the `RAPID-2.0-Test-Chain` folder when submit the job.
+
+Change the `sbatch` parameters as needed.
 
 
 

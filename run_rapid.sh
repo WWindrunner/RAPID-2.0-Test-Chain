@@ -12,13 +12,13 @@ declare -a POLS=("\"VV\"" "\"VH\"" "\"VV\",\"VH\"" "\"VV\",\"VH\"")
 declare -a TASKS=("\"binary_classify\"" "\"binary_classify\"" "\"morph_pre\"" "\"morph\"")
 
 LOG_FOLDER="$(dirname "$CMD_CONF")/logs"
-./helpers/modify_batch_file.sh "$CMD_CONF" "$BATCH_FILE"
+./helpers/modify_batch_file.sh
 mkdir -p "$LOG_FOLDER"
 
 file_id=1
 while [ "$file_id" -le "$FILE_ID_MAX" ]; do
     # Modify the cmd file
-    ./helpers/modify_cmd_conf.sh "$CMD_CONF" "$CONTROL_FILE" "$file_id"
+    ./helpers/modify_cmd_conf.sh "$CONTROL_FOLDER" "$file_id"
     echo -e "\nProcess image number $file_id ... \n\n"
     ((file_id++))
 
@@ -27,16 +27,16 @@ while [ "$file_id" -le "$FILE_ID_MAX" ]; do
         restart=0
         POL=${POLS[$i]}
         TASK=${TASKS[$i]}
-        rm "$LOG_FOLDER"/*
+        rm -f "$LOG_FOLDER"/*
 
         echo "=== [Run $((i+1))] TaskType=$TASK | Polarization=$POL ==="
 
         # Modify the project file
-        ./helpers/modify_project_file.sh "$CONTROL_FILE" "$POL" "$TASK"
+        ./helpers/modify_project_file.sh "$CONTROL_FOLDER" "$POL" "$TASK"
 
         # Submit the job
         JOB_ID=$(sbatch --parsable batch_rapid.sh)
-        LOG_FILE="slurm-${JOB_ID}.out"
+        LOG_FILE="slurm_${JOB_ID}.out"
         date
         echo "Submitted job ${JOB_ID}"
         sleep 10

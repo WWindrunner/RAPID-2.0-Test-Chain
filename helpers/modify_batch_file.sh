@@ -1,10 +1,12 @@
 #!/bin/bash
-# Usage: modify_batch_file.sh /a/cmd_RAPID.conf yourfile.txt
 
-CMD_CONF="$1"
-FILE="$2"
+# Copy the .sh file from ./templates,
+# and modify its content
 
-BASE_DIR=$(dirname "$CMD_CONF")
+TEMPLATE="./templates/template_batch.sh"
+BATCH_FILE="./batch_rapid.sh"
+cp "$TEMPLATE" "$BATCH_FILE"
+BASE_DIR="$(pwd)"
+CMD_CONF="$BASE_DIR/cmd_RAPID.conf"
 
-# Replace the srun line with new values
-sed -i "s|^srun .*|srun -l -o $BASE_DIR/logs/RAPID_v2-%j-%t.out --multi-prog $CMD_CONF|" "$FILE"
+sed -i "s|^srun .*|srun -l -o $BASE_DIR/logs/RAPID_v2-%j-%t.out --multi-prog $CMD_CONF|" "$BATCH_FILE"
