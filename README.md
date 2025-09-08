@@ -38,9 +38,9 @@ The script requires **SLURM** since it submits RAPID jobs and monitors job statu
 
 
 
-### 2. Modify `run_rapid.sh`
+### 2. Modify `run_rapid.conf` and `slurm_submit.sh`
 
-Edit the following variables in `run_rapid.sh`:
+Edit the following lines:
 
 
 

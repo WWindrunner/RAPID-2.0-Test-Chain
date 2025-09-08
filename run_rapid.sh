@@ -1,23 +1,24 @@
 #!/bin/bash
 
-#SBATCH --output=/home/uwm/maopuxu/rapid_test_chain_%j.out
 
-BATCH_FILE="/home/uwm/maopuxu/RAPID_script/batch_rapid.sh"
-CMD_CONF="/home/uwm/maopuxu/RAPID_script/cmd_RAPID.conf"
-CONTROL_FILE="/tank/data/SFS/xinyis/shared/data/RAPID_test/2022/case_20220501/case_20220501.project"
-FILE_ID_MAX=1
+CONF="$1"
+if [ -z "$CONF" ]; then
+    echo "Usage: sbatch run_rapid.sh <config_file>"
+    exit 1
+fi
+source "$CONF"
 
 declare -a POLS=("\"VV\"" "\"VH\"" "\"VV\",\"VH\"" "\"VV\",\"VH\"")
 declare -a TASKS=("\"binary_classify\"" "\"binary_classify\"" "\"morph_pre\"" "\"morph\"")
 
 LOG_FOLDER="$(dirname "$CMD_CONF")/logs"
-./modify_batch_file.sh "$CMD_CONF" "$BATCH_FILE"
+./helpers/modify_batch_file.sh "$CMD_CONF" "$BATCH_FILE"
 mkdir -p "$LOG_FOLDER"
 
 file_id=1
 while [ "$file_id" -le "$FILE_ID_MAX" ]; do
     # Modify the cmd file
-    ./modify_cmd_conf.sh "$CMD_CONF" "$CONTROL_FILE" "$file_id"
+    ./helpers/modify_cmd_conf.sh "$CMD_CONF" "$CONTROL_FILE" "$file_id"
     echo -e "\nProcess image number $file_id ... \n\n"
     ((file_id++))
 
@@ -31,7 +32,7 @@ while [ "$file_id" -le "$FILE_ID_MAX" ]; do
         echo "=== [Run $((i+1))] TaskType=$TASK | Polarization=$POL ==="
 
         # Modify the project file
-        ./modify_project_file.sh "$CONTROL_FILE" "$POL" "$TASK"
+        ./helpers/modify_project_file.sh "$CONTROL_FILE" "$POL" "$TASK"
 
         # Submit the job
         JOB_ID=$(sbatch --parsable batch_rapid.sh)

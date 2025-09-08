@@ -1,0 +1,138 @@
+################################################################################
+# RAPID  Project File
+################################################################################
+#Version	=	3.0
+# Operation System###############################################################
+OS              =       "linux"
+###############################################################################
+## MODEL Run Time Information
+################################################################################
+#1. Model Time follows the center based convetion,
+# i.e., the time marker the center of the time step.
+# For example, the start date is 2001123121 and the timeStep is 6h, 
+# which means the accumulation of the first iteration starts at 2001 Dec.,31,18:00 and ends at 2002 Jan. 01, 00:00
+# The same convention applies to all model output variables
+# Time line
+TimeFormat	=	yyyymmddTHHMMSS
+StartDate	=	20100101T000000
+Revisit         =       00200000T000000
+###############################################################################
+PreTaskType	=	"none"
+TaskType = "binary_classify"
+dirOut		=	"/tank/data/SFS/xinyis/shared/data/RAPID_test/2022/case_20220501/test_1/"
+dirLoc          =       "/tank/data/SFS/xinyis/shared/data/RAPID_test/2022/case_20220501/test_1/"
+###############################################################################
+# Directories of Raster Files
+###############################################################################
+MarginWidth	=	100
+ValidSwaths     =       "N/A"
+PathZip		=	"none"
+PathUnzip	=	"none"
+PathSD          =       "none"
+PolSAR		=	"/tank/data/SFS/xinyis/shared/data/RAPID_test/2022/case_20220501/normalized_data/" 
+ext		=	".tif"
+ProbMap		=	"/tank/data/SFS/xinyis/shared/data/RAPID_test/ProbMap/Prob.vrt"
+LCC		=	"/tank/data/SFS/xinyis/data/LCC/LCC.vrt"
+RiverWidth	=	"none"
+DEM		=	"none"
+FDR		=	"none"
+FAC		=	"none"
+stream		=	24000	
+#########################################################################
+# parameters of binary classification
+##########################################################################
+Polarizations = "VV"
+##############################################################################
+# ENL 
+##############################################################################
+SARMode		=	IW,SM
+ENL		=	4.9 #30 19.7
+#
+pathWL		=	"N/A"
+pathCluster	=	"none"
+##############################################################################
+# Multi-Thresholds (% tolerance of seeding area to be misclassified)
+##############################################################################i
+SeedProb	=	10 # %minimal probability to be considered as permanent water body
+NSCE_th         =       0.2
+th_grid_ratio   =       0.3
+#
+optimizePDF	=	no
+optThProb	=	yes
+#
+thStart		=	0.4
+thEnd		=	0.95
+pLow		=	5,4,3,2,1  # % low probability threholds 
+Stat		=	"init/"
+##############################################################################
+### Mosiac_Pre
+################################################################################
+dirMosaic       =	"Mosaic_Pre/"
+##############################################################################
+# Morphological Thresholds (adjustment not required)
+###############################################################################
+morph		=	"morph/"
+optMorph        =       "LCC_only" # algorithm options
+WBClasses	=	80,90,95    # code for water classes in LCC map
+nWBClasses	=	50	## code for developed area with high density
+thPrcBimodal    =       50,25,10 # percentile of water area and non water area
+rNWB_WST        =       0.3,0.3,0.4,0.4,0.4     # maximum fraction of developed pixels in WST
+thSize		=	10,10,10,50,50 # lower limit of size of a water body
+thComp		=	0,0,0.25,2,2	# compactness threshold 
+thInund		=	0.3 	# minimal change fraction
+rInund		=	1	# dArea>rInund*rNWB
+blockSizeMorph  =       3000
+#
+WL_morph	=	"none"
+WLClasses	=	0,1,2
+nWLClasses	=	0,1,2
+rNWL_WST	=	0
+thWL		=	0
+#############################################################################
+#Ocean Mask Generation
+#############################################################################
+blockSizeOcean	=	12000
+##############################################################################
+#LBs identifications
+###############################################################################
+fileLake        =       "/shared/manoslab/Hurricane_Inundation/Harvey_2017_v2/lake.tif"
+fileOceanMask   =       "/tank/data/SFS/xinyis/data/ocean_mask/buffered_ocean_5km.shp","ne_10m_ocean"
+fileHydroLake   =       "/shared/manoslab/data/lake/HydroLAKES_polys_v10_shp/HydroLAKES_polys_v10_shp/HydroLAKES_polys_v10.shp"
+fileStreamLine  =       "/shared/manoslab/data/US_Detailed_Water_Location/USA_Detailed_Streams/USA_Detailed_Streams.shp"
+fileStreamBuffer	=	 "/shared/manoslab/data/US_Detailed_Water_Location/US_Detailed_Streams_Buf/USA_Stream_Buff.shp"	
+thHydroLake     =       0.7
+thFAC_Lake      =       7e8
+thProb1_Lake    =       45
+thProb2_Lake    =       20
+thComp_Lake     =       0.0400
+blockSize_Lake  =       5000
+#
+##############################################################################
+#Machine Learning Parameters
+##############################################################################
+ML              =       "ML/"
+blockSizeMLTrain         =       3000
+DEMScaling      =       1
+optRiverWidth   =       "GA"
+minWidth        =       60
+maxWidth        =       3500
+fileWGS84       =       "/tank/data/SFS/xinyis/shared/data/RAPID_test/ProbMap/Prob.vrt"
+##############################################################################
+##Machine Learning Parameters
+###############################################################################
+thWRiver        =       0.8
+thNWRiver       =       0.1
+thWLake         =       0.8
+thNWLake        =       0.1
+blockSizeImg    =       6000
+blockSizeTable  =       5000000
+##############################################################################
+#Computational
+##############################################################################
+compMode	=	Parallel # Sequential
+blockSizeMorph	=	3000
+##############################################################################
+#########################################################
+DecompBeforeSrc	=	"gunzip -c "
+DecompBeforeDst =	">"
+OS		=	"linux"
