@@ -53,7 +53,16 @@ Path to the folder to place the control file.
 
 This script will automaticlly generate the corresponding `RAPID.project` file in that folder.
 
-The images to be processed are in the folder `processed_images` as default, under the same folder.
+The RAPID results will also be in that folder.
+
+
+```bash
+
+INPUT_FOLDER="/tank/data/SFS/xinyis/shared/data/RAPID_test/2022/case_20220501"
+
+```
+
+The images to be processed are in this folder.
 
 
 ```bash

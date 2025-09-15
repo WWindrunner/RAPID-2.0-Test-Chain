@@ -32,7 +32,7 @@ while [ "$file_id" -le "$FILE_ID_MAX" ]; do
         echo "=== [Run $((i+1))] TaskType=$TASK | Polarization=$POL ==="
 
         # Modify the project file
-        ./helpers/modify_project_file.sh "$CONTROL_FOLDER" "$POL" "$TASK"
+        ./helpers/modify_project_file.sh "$INPUT_FOLDER" "$CONTROL_FOLDER" "$POL" "$TASK"
 
         # Submit the job
         JOB_ID=$(sbatch --parsable batch_rapid.sh)
@@ -84,7 +84,7 @@ while [ "$file_id" -le "$FILE_ID_MAX" ]; do
                     if grep -qi "sufficient initialization windows" "$file"; then
                         echo "Cannot continue due to insufficient initialization windows."
                         scancel $JOB_ID
-                        rm "$LOG_FILE"
+                        rm -f "$LOG_FILE"
                         #exit 1
                         image_failed=1
                     elif grep -qi "ALL_DONE_FLAG" "$file"; then

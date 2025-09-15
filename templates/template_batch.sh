@@ -6,7 +6,7 @@
 
 #SBATCH --partition=batch
 #SBATCH --mem-per-cpu=4G	
-#SBATCH --ntasks=150
+#SBATCH --ntasks=100
 
 source /home/uwm/maopuxu/.bashrc
 cd /home/uwm/maopuxu/water_body_extraction/RAPID/

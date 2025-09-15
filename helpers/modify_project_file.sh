@@ -3,15 +3,16 @@
 # Copy the .project file from ./templates,
 # and modify its content based on the input folder
 
-TARGET_DIR="$1"
-NEW_POL="$2"
-NEW_TASK="$3"
+INPUT_DIR="$1"
+TARGET_DIR="$2"
+NEW_POL="$3"
+NEW_TASK="$4"
 
 NEW_POL="Polarizations = $NEW_POL"
 NEW_TASK="TaskType = $NEW_TASK"
 NEW_DIROUT="dirOut = \"$TARGET_DIR/rapid_results\""
 NEW_DIRLOC="dirLoc = \"$TARGET_DIR/rapid_results\""
-NEW_POLSAR="PolSAR = \"$TARGET_DIR/processed_images\""
+NEW_POLSAR="PolSAR = \"$INPUT_DIR\""
 
 TEMPLATE="./templates/template_config.project"
 CONTROL_FILE="$TARGET_DIR/RAPID.project"
