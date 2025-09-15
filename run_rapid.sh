@@ -11,9 +11,10 @@ source "$CONF"
 declare -a POLS=("\"VV\"" "\"VH\"" "\"VV\",\"VH\"" "\"VV\",\"VH\"")
 declare -a TASKS=("\"binary_classify\"" "\"binary_classify\"" "\"morph_pre\"" "\"morph\"")
 
-LOG_FOLDER="$(dirname "$CMD_CONF")/logs"
-./helpers/modify_batch_file.sh
-mkdir -p "$LOG_FOLDER"
+# Set log folder in config file
+#MAIN_LOG_FOLDER="$(dirname "$CMD_CONF")/logs"
+#./helpers/modify_batch_file.sh
+mkdir -p "$MAIN_LOG_FOLDER"
 
 file_id=1
 while [ "$file_id" -le "$FILE_ID_MAX" ]; do
@@ -27,12 +28,18 @@ while [ "$file_id" -le "$FILE_ID_MAX" ]; do
         restart=0
         POL=${POLS[$i]}
         TASK=${TASKS[$i]}
-        rm -f "$LOG_FOLDER"/*
+        #rm -f "$LOG_FOLDER"/*
 
         echo "=== [Run $((i+1))] TaskType=$TASK | Polarization=$POL ==="
 
         # Modify the project file
         ./helpers/modify_project_file.sh "$INPUT_FOLDER" "$CONTROL_FOLDER" "$POL" "$TASK"
+
+	# Modify the batch file, set log folder here
+	LOG_FOLDER="$MAIN_LOG_FOLDER/${TASK}_${POL}_$(date +%F-%T)"
+	mkdir -p "$LOG_FOLDER"
+	rm -f "$LOG_FOLDER"/*
+	./helpers/modify_batch_file.sh "$LOG_FOLDER"
 
         # Submit the job
         JOB_ID=$(sbatch --parsable batch_rapid.sh)
