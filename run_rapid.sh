@@ -16,6 +16,18 @@ declare -a TASKS=("\"binary_classify\"" "\"binary_classify\"" "\"morph_pre\"" "\
 #./helpers/modify_batch_file.sh
 mkdir -p "$MAIN_LOG_FOLDER"
 
+# If run in release mode, read in the input folder
+if [ "$RELEASE_MODE" -eq 1 ]; then
+    echo "Program runs in RELEASE mode"
+    INPUT_FOLDER=$(./helpers/get_image.sh "$IMAGE_PROCESS_DIR")
+    if [ -z "$x" ]; then
+	echo "No input folder detected"
+	exit 0
+    fi
+else
+    echo "Program runs in NORMAL mode"
+fi
+
 file_id=1
 while [ "$file_id" -le "$FILE_ID_MAX" ]; do
     # Modify the cmd file
@@ -36,7 +48,7 @@ while [ "$file_id" -le "$FILE_ID_MAX" ]; do
         ./helpers/modify_project_file.sh "$INPUT_FOLDER" "$CONTROL_FOLDER" "$POL" "$TASK"
 
 	# Modify the batch file, set log folder here
-	LOG_FOLDER="$MAIN_LOG_FOLDER/${TASK}_${POL}_$(date +%F-%T)"
+	LOG_FOLDER="$MAIN_LOG_FOLDER/${TASK//\"/}_${POL//\"/}_$(date +%F-%T)"
 	mkdir -p "$LOG_FOLDER"
 	rm -f "$LOG_FOLDER"/*
 	./helpers/modify_batch_file.sh "$LOG_FOLDER"
