@@ -34,6 +34,7 @@ while [ "$file_id" -le "$FILE_ID_MAX" ]; do
     ./helpers/modify_cmd_conf.sh "$CONTROL_FOLDER" "$file_id"
     echo -e "\nProcess image number $file_id ... \n\n"
     ((file_id++))
+    restart_count=0
 
     i=0
     while [ "$i" -le 3 ]; do
@@ -90,7 +91,7 @@ while [ "$file_id" -le "$FILE_ID_MAX" ]; do
                     exit 1
                 fi
 
-                rm "$LOG_FILE"
+                rm -f "$LOG_FILE"
                 break
             elif [ "$STATUS" == "PENDING" ]; then
                 echo "Job ${JOB_ID} is pending."
@@ -102,20 +103,18 @@ while [ "$file_id" -le "$FILE_ID_MAX" ]; do
                     #echo "Checking $file..."
                     if grep -qi "sufficient initialization windows" "$file"; then
                         echo "Cannot continue due to insufficient initialization windows."
-                        scancel $JOB_ID
-                        rm -f "$LOG_FILE"
-                        #exit 1
                         image_failed=1
+			break
                     elif grep -qi "ALL_DONE_FLAG" "$file"; then
                         echo "Finish flag detected ..."
                         echo "Cancel job and continue (NO RERUN PREVIOUS TASK)"
                         restart=1
                         ((i++))  # Do not rerun the previous task
                         break
-                    elif grep -qi "error" "$file"; then
+                    elif grep -q "Error in" "$file"; then
                         echo "Error found in $file"
                         echo "================"
-                        tail -n 20 "$file"
+                        tail -n 25 "$file"
                         echo "================"
                         echo "Rerun the previous task ..."
                         restart=1
@@ -125,7 +124,6 @@ while [ "$file_id" -le "$FILE_ID_MAX" ]; do
 
                 # If this image failed with some reason
                 if [ $image_failed == 1 ]; then
-                    rm "$LOG_FILE"
                     break
                 fi
 
@@ -138,10 +136,18 @@ while [ "$file_id" -le "$FILE_ID_MAX" ]; do
 
                 # Set to rerun the previous task
                 if [ $restart == 1 ]; then
+		    if [ $restart_count == 3 ]; then
+			echo "Restarted too many times, skip this image ..."
+			image_failed=1
+                        break
+		    else
+			((restart_count++))
+		    fi
+		    
                     ((i--))
                     scancel $JOB_ID
                     sleep 5
-                    rm "$LOG_FILE"
+                    rm -f "$LOG_FILE"
                     break
                 fi
             fi
@@ -153,6 +159,9 @@ while [ "$file_id" -le "$FILE_ID_MAX" ]; do
 
         if [ $image_failed == 1 ]; then
             echo "Continue to the next image ..."
+	    scancel $JOB_ID
+            sleep 5
+            rm -f "$LOG_FILE"
             break
         fi
 
