@@ -34,12 +34,10 @@ COM_FOLDER="${CONTROL_FOLDER}/com"
 mkdir -p "$CONTROL_FOLDER"
 mkdir -p "$COM_FOLDER"
 
-file_id=1
-while [ "$file_id" -le "$FILE_ID_MAX" ]; do
-    # Modify the cmd file
-    ./helpers/modify_cmd_conf.sh "$CONTROL_FOLDER" "$file_id"
-    echo -e "\nProcess image number $file_id ... \n\n"
+file_id=0
+while [ "$file_id" -lt "$FILE_ID_MAX" ]; do
     ((file_id++))
+    echo -e "\nProcess image number $file_id ... \n\n"
     restart_count=0
 
     i=0
@@ -57,6 +55,9 @@ while [ "$file_id" -le "$FILE_ID_MAX" ]; do
 	    ((i++))
 	    continue
 	fi
+
+	# Modify the cmd file
+        ./helpers/modify_cmd_conf.sh "$CONTROL_FOLDER" "$file_id"
 		
         # Modify the project file
         ./helpers/modify_project_file.sh "$INPUT_FOLDER" "$CONTROL_FOLDER" "$POL" "$TASK"
