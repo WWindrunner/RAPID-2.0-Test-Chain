@@ -16,17 +16,20 @@ declare -a TASKS=("\"binary_classify\"" "\"binary_classify\"" "\"morph_pre\"" "\
 #./helpers/modify_batch_file.sh
 mkdir -p "$MAIN_LOG_FOLDER"
 
-# If run in release mode, read in the input folder
+# If run in release mode, read in the input folder and set output folder
 if [ "$RELEASE_MODE" -eq 1 ]; then
     echo "Program runs in RELEASE mode"
     INPUT_FOLDER=$(./helpers/get_image.sh "$IMAGE_PROCESS_DIR")
-    if [ -z "$x" ]; then
+    if [ -d "$INPUT_FOLDER" ]; then
 	echo "No input folder detected"
 	exit 0
     fi
+    CONTROL_FOLDER="${DAILY_OUTPUT_FOLDER}/$(date -d "yesterday" +%F)"
+    FILE_ID_MAX=$(ls -l "$INPUT_FOLDER" | grep ^d | wc -l)
 else
     echo "Program runs in NORMAL mode"
 fi
+mkdir -p "$CONTROL_FOLDER"
 
 file_id=1
 while [ "$file_id" -le "$FILE_ID_MAX" ]; do
