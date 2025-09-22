@@ -14,3 +14,4 @@ cp "$TEMPLATE" "$CONF_FILE"
 
 sed -i "s/'[^']*\.project/'$ESC_PATH/g" "$CONF_FILE"
 sed -Ei "s/',[0-9]+,/',$FILE_ID,/1" "$CONF_FILE"
+sed -Ei "s/,[0-9]+\)/,$(date +%s)\)/1" "$CONF_FILE"

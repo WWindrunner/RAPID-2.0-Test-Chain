@@ -21,15 +21,18 @@ if [ "$RELEASE_MODE" -eq 1 ]; then
     echo "Program runs in RELEASE mode"
     INPUT_FOLDER=$(./helpers/get_image.sh "$IMAGE_PROCESS_DIR")
     if [ -d "$INPUT_FOLDER" ]; then
+	CONTROL_FOLDER="${DAILY_OUTPUT_FOLDER}/$(date -d "yesterday" +%F)"
+        FILE_ID_MAX=$(ls -l "$INPUT_FOLDER" | grep ^d | wc -l)
+    else
 	echo "No input folder detected"
 	exit 0
     fi
-    CONTROL_FOLDER="${DAILY_OUTPUT_FOLDER}/$(date -d "yesterday" +%F)"
-    FILE_ID_MAX=$(ls -l "$INPUT_FOLDER" | grep ^d | wc -l)
 else
     echo "Program runs in NORMAL mode"
 fi
+COM_FOLDER="${CONTROL_FOLDER}/com"
 mkdir -p "$CONTROL_FOLDER"
+mkdir -p "$COM_FOLDER"
 
 file_id=1
 while [ "$file_id" -le "$FILE_ID_MAX" ]; do
@@ -48,6 +51,13 @@ while [ "$file_id" -le "$FILE_ID_MAX" ]; do
 
         echo "=== [Run $((i+1))] TaskType=$TASK | Polarization=$POL ==="
 
+	# Check if this step has been done before
+	if [ -f "${COM_FOLDER}/${file_id}_${i}_done.txt" ]; then
+	    echo "This task has been done before, move on ..."
+	    ((i++))
+	    continue
+	fi
+		
         # Modify the project file
         ./helpers/modify_project_file.sh "$INPUT_FOLDER" "$CONTROL_FOLDER" "$POL" "$TASK"
 
@@ -80,6 +90,8 @@ while [ "$file_id" -le "$FILE_ID_MAX" ]; do
 
                 if grep -q "exit code 0" "$LOG_FILE"; then
                     echo "Job ${JOB_ID} finished successfully after ${ELAPSED} min."
+		    # Record finish status in com folder
+		    touch "${COM_FOLDER}/${file_id}_${i}_done.txt"
                 elif grep -q "CANCELLED" "$LOG_FILE"; then
                     echo "Job cancelled, continue on ..."
                 elif grep -q "error" "$LOG_FILE"; then
