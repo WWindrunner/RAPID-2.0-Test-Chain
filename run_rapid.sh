@@ -57,7 +57,7 @@ while [ "$file_id" -lt "$FILE_ID_MAX" ]; do
 	fi
 
 	# Modify the cmd file
-        ./helpers/modify_cmd_conf.sh "$CONTROL_FOLDER" "$file_id"
+        ./helpers/modify_cmd_conf.sh "$CONTROL_FOLDER" "$file_id" "$RUN_BINARY"
 		
         # Modify the project file
         ./helpers/modify_project_file.sh "$INPUT_FOLDER" "$CONTROL_FOLDER" "$POL" "$TASK"
