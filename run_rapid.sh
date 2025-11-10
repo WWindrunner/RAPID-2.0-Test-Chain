@@ -126,6 +126,7 @@ while [ "$file_id" -lt "$FILE_ID_MAX" ]; do
                         echo "Cancel job and continue (NO RERUN PREVIOUS TASK)"
                         restart=1
                         ((i++))  # Do not rerun the previous task
+			touch "${COM_FOLDER}/${file_id}_${i}_done.txt"
                         break
                     elif grep -q "Error in" "$file"; then
                         echo "Error found in $file"
@@ -152,7 +153,7 @@ while [ "$file_id" -lt "$FILE_ID_MAX" ]; do
 
                 # Set to rerun the previous task
                 if [ $restart == 1 ]; then
-		    if [ $restart_count == 3 ]; then
+		    if [ $restart_count == 7 ]; then
 			echo "Restarted too many times, skip this image ..."
 			image_failed=1
                         break
