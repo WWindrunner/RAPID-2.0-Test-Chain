@@ -125,8 +125,8 @@ while [ "$file_id" -lt "$FILE_ID_MAX" ]; do
                         echo "Finish flag detected ..."
                         echo "Cancel job and continue (NO RERUN PREVIOUS TASK)"
                         restart=1
-                        ((i++))  # Do not rerun the previous task
 			touch "${COM_FOLDER}/${file_id}_${i}_done.txt"
+                        ((i++))  # Do not rerun the previous task
                         break
                     elif grep -q "Error in" "$file"; then
                         echo "Error found in $file"
